@@ -5,9 +5,13 @@ VALUES ("HR Department"),
        ("Finance Department"),
        ("Helpdesk Department");
 
-INSERT INTO role (title, salary)
-VALUES ("Customer Service" , 40,000),
-       ("IT", 60,000),
-       ("Enterprise Technology representative", 120,000),
-       ("Finance Representative", 80,000);
--- INSERT INTO employee (movie_name)
+INSERT INTO role (title, salary, department_id)
+VALUES ("Customer Service" , 40000, 5),
+       ("IT", 60000, 2),
+       ("ET representative", 120000, 2),
+       ("Finance Representative", 80000, 4);
+INSERT INTO employee (first_name, last_name, role_id)
+VALUES ("Amber", "Sweet", 4),
+        ("Alex", "Moore", 2),
+        ("Nicolas", "Ball", 3),
+        ("Matt", "Dunn", 1);
