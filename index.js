@@ -1,7 +1,7 @@
 
 // Import and require mysql2
 const mysql = require('mysql2');
-
+require('console.table')
 // Connect to database
 const db = mysql.createConnection(
   {
@@ -12,11 +12,11 @@ const db = mysql.createConnection(
     password: '',
     database: 'employee_db'
   },
-  console.log(`Connected to the movies_db database.`)
+  console.log(`Connected to the employee_db database.`)
 );
 const inquirer = require('inquirer');
 
-inquirer
+function start(){inquirer
   .prompt([
     {
       type: 'list',
@@ -27,7 +27,10 @@ inquirer
   ])
   .then(answers => {
     if (answers.employees == 'view all roles') {
-     
+     db.promise().query(`SELECT role.id, title, salary, department_name FROM role LEFT JOIN department ON department_id = department.id`).then(([data]) => {
+      console.table(data)
+      start()
+     })
     }
     if (answers.employees == 'view all departments'){
 
@@ -48,7 +51,8 @@ inquirer
       
     }
   });
-
+}
+start()
 
 
 // Create a movie
