@@ -33,22 +33,40 @@ function start(){inquirer
      })
     }
     if (answers.employees == 'view all departments'){
-
+      db.promise().query(`SELECT department.id, department.name FROM department;`).then(([data]) => {
+        console.table(data)
+        start()
+       })
     }
     if (answers.employees == 'view all employees'){
-      
+      db.promise().query(`SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id LEFT JOIN employee manager on manager.id = employee.manager_id;`).then(([data]) => {
+        console.table(data)
+        start()
+       })
     }
     if (answers.employees == 'add a department'){
-      
+      db.promise().query(`INSERT INTO department SET?`).then(([data]) => {
+        console.table(data)
+        start()
+       })
     }
     if (answers.employees == 'add a role'){
-      
+      db.promise().query(`INSERT INTO role SET?`).then(([data]) => {
+        console.table(data)
+        start()
+       })
     }
     if (answers.employees == 'add an employee'){
-      
+      db.promise().query(`INSERT INTO employee SET?`).then(([data]) => {
+        console.table(data)
+        start()
+       })
     }
     if (answers.employees == 'update an employee role'){
-      
+      db.promise().query(`UPDATE employee SET role_id = ? WHERE id = ?`).then(([data]) => {
+        console.table(data)
+        start()
+       })
     }
   });
 }
