@@ -238,7 +238,7 @@ function updateEmpRole() {
                                 type: "list",
                                 choices: rolesChoices
                             }
-                        ]).then(res => {db.updateEmployeeRole(empid, res.role_id).then(() => start())})
+                        ]).then(res => { db.updateEmployeeRole(empid, res.role_id).then(() => start()) })
                     })
             })
 
