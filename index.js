@@ -75,7 +75,7 @@ function start() {
                     addEmployee();
                     break;
                 case "UPDATE_EMPLOYEE_ROLE":
-                    updateEmployeeRole();
+                    updateEmpRole();
                     break;
                 default:
                     quit();
@@ -138,7 +138,7 @@ function addEmployee() {
                             name: `${first_name} ${last_name}`,
                             value: id
                         }));
-                        managerChoices.unshift({ name: "None", value=null });
+                        managerChoices.unshift({ name: "None", value: null });
                         prompt({
                             type: 'list',
                             name: 'managerId',
@@ -155,33 +155,99 @@ function addEmployee() {
                         }).then(() => console.log(`added ${firstName} ${lastName} to the database`))
                     }).then(() => start())
                 }
+                )
+        }
+        )
+    }
+    )
+}
+function addRole() {
+    db.findAllDepartments()
+        .then(([dept]) => {
+            let alldept = dept
+            let deptChoices = alldept.map(data => ({
+                name: data.name,
+                value: data.id,
+            }))
+            prompt([
+                {
+                    name: "title",
+                    message: "what is the name of the role?",
+                },
+                {
+                    name: "salary",
+                    message: "what is the salary for the role?",
+                },
+                {
+                    name: "department_id",
+                    message: "which department does the row belong to?",
+                    type: "list",
+                    choices: deptChoices
+                }
+            ]).then(res => {
+                let name = res;
+                db.createRole(name).then(() => start())
+            })
+        })
 
-    function addRole() {
-                        //method find departments.then rows, department choices interation 
-                        //create prompt
-                        //3 prompts
-                    }
+}
 
-    function addDepartment() {
+
+function addDepartment() {
+    prompt([
+        {
+            name: "name",
+            message: "what is your department name?"
+        }
+    ]).then(res => {
+        let name = res;
+        db.createDepartment(name).then(() => start())
+    })
+}
+
+function updateEmpRole() {
+    db.findAllEmployees()
+        .then(([emp]) => {
+            let allemp = emp
+            let empChoices = allemp.map(data => ({
+                name: data.first_name + " " + data.last_name,
+                value: data.id,
+            }))
+            prompt([
+
+                {
+                    name: "employee_id",
+                    message: "which employee do you want to update?",
+                    type: "list",
+                    choices: empChoices
+                }
+            ]).then(res => {
+                let empid = res.employee_id;
+                db.findAllRoles()
+                    .then(([roles]) => {
+                        let allroles = roles
+                        let rolesChoices = allroles.map(data => ({
+                            name: data.title,
+                            value: data.id,
+                        }))
                         prompt([
+
                             {
-                                name: "name",
-                                message: "what is your department name?"
+                                name: "role_id",
+                                message: "which role do you want to give this employee?",
+                                type: "list",
+                                choices: rolesChoices
                             }
-                        ]).then(res => {
-                            let name = res;
-                            db.createDepartment(name).then(() => start())
-                        })
-                    }
+                        ]).then(res => {db.updateEmployeeRole(empid, res.role_id).then(() => start())})
+                    })
+            })
 
-    function updateEmployeeRole() {
-                        // find all employees
-                        // find all roles
+        })
 
-                    }
+}
 
-    function quit() {
-                        console.log("goodbye")
-                        process.exit();
-                    }
-    start();
+function quit() {
+    console.log("goodbye")
+    process.exit();
+}
+start();
